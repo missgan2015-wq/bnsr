@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- API 23+：白底状态栏，图标/信号/时间用深色，避免顶部"黑框"或浅图标看不清 -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:colorBackground">@color/windowBackground</item>
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColorSecondary">@color/textSecondary</item>
+
+        <item name="alertDialogTheme">@style/AppDialogTheme</item>
+
+        <!-- 关键：状态栏前景图标用深色 -->
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

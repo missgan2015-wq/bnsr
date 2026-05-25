@@ -1,0 +1,25 @@
+// 顶层 build 文件
+buildscript {
+    ext.kotlin_version = '1.8.22'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // AGP 7.4.2 是最后支持 com.android.support v7 的主要版本
+        // 与本地 Gradle 8.14.2 + JDK 17 组合可工作
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
