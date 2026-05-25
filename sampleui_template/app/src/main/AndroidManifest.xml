@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 屏幕浮窗高亮需要的权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 本地控制服务（监听 127.0.0.1:8989，接收 autogo 二进制的命令） -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 读取脚本目录 (/sdcard/AutoGo/scripts/) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 前台服务保活 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- 请求加入电池优化白名单 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- 开机自启（可选，用于配合 BootReceiver） -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".LogListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".LogDetailActivity"
+            android:exported="false" />
+
+        <!-- 透明 Activity，仅承载 ui.lua 配置对话框；不显示主界面 -->
+        <!--
+            历史上这里曾用 taskAffinity="" + launchMode="singleInstance" 把它强制
+            分到独立 task，再叠 FLAG_ACTIVITY_NEW_TASK 启动；结果是 MuMu / 桌面化
+            Android 的底部任务栏会显示两个独立的 app 标签（MainActivity 一个、
+            DialogActivity 一个）。
+
+            现在改回默认 standard 栈：DialogActivity 跟 MainActivity 共用同一个 task，
+            从 Activity 启动时不再加 NEW_TASK；从非 Activity 上下文（VSIX
+            headless 路径）启动时才加 NEW_TASK，这种情况下系统会复用同 affinity 的
+            已有 task，不会另开一个标签。
+        -->
+        <activity
+            android:name=".DialogActivity"
+            android:exported="false"
+            android:theme="@style/TransparentTheme"
+            android:excludeFromRecents="true" />
+
+        <!-- 前台保活服务 -->
+        <service
+            android:name=".KeepAliveService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- 接收 easyLua root 进程发来的 Toast 请求（方案 B） -->
+        <receiver
+            android:name=".control.ToastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.easylua.TOAST" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFFFF">
+
+    <!-- 顶部栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#FFFFFFFF"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="easyLua"
+            android:textColor="#FF222222"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="未运行"
+            android:textColor="#FF888888"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFE0E0E0" />
+
+    <!-- 功能列表 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFE0E0E0" />
+
+        <!-- 行：ROOT 权限（带复选框） -->
+        <LinearLayout
+            android:id="@+id/cardRoot"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:paddingEnd="20dp"
+            android:paddingRight="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="开启ROOT(激活)模式服务"
+                android:textColor="#FF222222"
+                android:textSize="16sp" />
+
+            <!-- CheckBox 装在 48dp 容器里居中显示，跟下方"日志"行的箭头容器对齐 -->
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/cbRoot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:minWidth="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="0dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:buttonTint="#FF1976D2" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFE0E0E0" />
+
+        <!-- 行：悬浮窗权限（带复选框） -->
+        <LinearLayout
+            android:id="@+id/cardOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:paddingEnd="20dp"
+            android:paddingRight="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="开启悬浮窗权限"
+                android:textColor="#FF222222"
+                android:textSize="16sp" />
+
+            <!-- CheckBox 装在 48dp 容器里居中显示，跟下方"日志"行的箭头容器对齐 -->
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/cbOverlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:minWidth="0dp"
+                    android:paddingStart="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingRight="0dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:buttonTint="#FF1976D2" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- 行：日志 -->
+        <LinearLayout
+            android:id="@+id/cardLogs"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:paddingEnd="20dp"
+            android:paddingRight="20dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="脚本日志"
+                android:textColor="#FF222222"
+                android:textSize="16sp" />
+
+            <!-- 宽度对齐 CheckBox（约 48dp），居中放箭头使视觉对齐 -->
+            <TextView
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="›"
+                android:textColor="#FFAAAAAA"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFE0E0E0" />
+    </LinearLayout>
+
+    <!-- 底部按钮 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFE0E0E0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#FFFFFFFF">
+
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="启动脚本"
+            android:textSize="16sp"
+            android:textColor="#FFFFFFFF"
+            android:background="#FF1976D2" />
+    </LinearLayout>
+
+</LinearLayout>

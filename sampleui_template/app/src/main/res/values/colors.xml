@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深色主题色板 -->
+    <color name="colorPrimary">#7986CB</color>
+    <!-- 状态栏背景：与 Activity 顶部栏（白底）融为一体，避免出现一条黑色信号栏。
+         配合 values-v23/styles.xml 的 windowLightStatusBar=true 让图标变成深色。 -->
+    <color name="colorPrimaryDark">#FFFFFFFF</color>
+    <color name="colorAccent">#FF80AB</color>
+
+    <color name="windowBackground">#121212</color>
+    <color name="surfaceBackground">#1E1E1E</color>
+    <color name="dividerColor">#2A2A2A</color>
+
+    <color name="textPrimary">#E6E6E6</color>
+    <color name="textSecondary">#9E9E9E</color>
+</resources>

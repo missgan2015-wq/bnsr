@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- AppCompat 深色主题（Support v7） -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 强制深色窗口背景，避免 OEM 主题覆盖 -->
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:colorBackground">@color/windowBackground</item>
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColorSecondary">@color/textSecondary</item>
+
+        <!-- 让所有 AlertDialog 走自定义主题，按钮文字会变白 -->
+        <item name="alertDialogTheme">@style/AppDialogTheme</item>
+    </style>
+
+    <!-- 对话框主题：底部按钮文字用白色 -->
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- AlertDialog 的 +/- 按钮文字色取自 colorAccent，本主题内覆盖为白 -->
+        <item name="colorAccent">#FFFFFFFF</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AppDialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AppDialogButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AppDialogButton</item>
+    </style>
+
+    <!-- 单独的按钮样式，确保 textColor 强制为白（兜底，部分 ROM 不读 colorAccent） -->
+    <style name="AppDialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- 透明 Activity 主题：用来承载脚本配置对话框，看不到任何主界面。
+         状态栏要彻底透明（让下层桌面/上层 ROM 的原色透出来），不继承 AppTheme，
+         而是显式声明 statusBarColor=transparent + windowDrawsSystemBarBackgrounds。 -->
+    <style name="TransparentTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- 关掉系统默认的下层暗化遮罩；对话框自己的遮罩由 OpRenderer 管 -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- Activity 不挡触摸：对话框之外的区域可以穿透到下层 -->
+        <item name="android:windowDisablePreview">true</item>
+        <!-- 关键：让状态栏背景完全透明 + 让 window 自己绘制系统栏区域。
+             这两个组合下，status bar 的色彩由下层（桌面 / launcher）决定，
+             不会再被 AppCompat 默认的 colorPrimaryDark 染成黑/白色。 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+</resources>

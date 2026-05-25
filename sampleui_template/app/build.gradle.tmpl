@@ -1,0 +1,63 @@
+// SampleUI 载体模板 —— apkbuild 渲染后产出 build.gradle
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    namespace 'com.example.sampleui'
+    compileSdkVersion 34
+
+    defaultConfig {
+        applicationId "{{PKG}}"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode {{VERSION_CODE}}
+        versionName "{{VERSION_NAME}}"
+
+        // 通过模板渲染按用户选择填入；默认 arm64-v8a + x86_64
+        ndk {
+            abiFilters {{ABI_FILTERS}}
+        }
+    }
+
+    // jniLibs 中的 .so 文件不要被压缩，确保安装后能直接执行
+    aaptOptions {
+        noCompress 'so'
+    }
+
+    // assets 内的字节码（.luac）、dex、加密资源（.enc）都要保持未压缩，
+    // 让 ScriptDeployer 直接 streamCopy + native lib_io.c 走 fopen 可读。
+    androidResources {
+        noCompress 'luac', 'dex', 'enc'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    // SampleUI 的 targetSdkVersion=28 与 Play Store 现行要求（≥31）不符，
+    // lintVitalRelease 在 release 构建时会把它当 fatal。打包到本地/sideload 不受影响，
+    // 这里关掉 lint vital 避免阻塞 assembleRelease。
+    // 用户要上 Play Store 时单独再调高 targetSdk。
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // Support Library v7 + Design（旧版 Material）
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+}

@@ -1,0 +1,21 @@
+[obfus-win] backport src = E:\auto_apk\Backport_Project\src
+[obfus-win] mingw bin    = D:\mingw64\bin
+[obfus-win] out          = E:\auto_apk\easylua\out_obfus
+[obfus-win] make clean…
+[obfus-win] mingw32-make XCFLAGS=-DLUAJIT_ENABLE_OBFUS BUILDMODE=static -j…
+**** WARNING Cannot determine rolling release version from git log.
+**** WARNING The 'git' command must be available during the build.
+"OK        Successfully built LuaJIT"
+[obfus-win] OK luajit.exe = 572350 bytes
+
+[obfus-win] 自验证 .luac magic…
+[obfus-win] magic = FB E3 EF 90
+[obfus-win] OK obfus magic 正确
+
+[obfus-win] 完成 -> E:\auto_apk\easylua\out_obfus\host-windows-x86_64
+[obfus-win] 产物:
+  .\libluajit.a (841234 bytes)
+  .\luajit.exe (572350 bytes)
+  .\jit\bc.lua (5736 bytes)
+  .\jit\bcsave.lua (18464 bytes)
+  .\jit\vmdef.lua (8694 bytes)
