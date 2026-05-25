@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>easyLua API 参考</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --panel: #ffffff;
+      --text: #2d3748;
+      --muted: #718096;
+      --accent: #3182ce;
+      --accent-light: #ebf8ff;
+      --code-bg: #1a202c;
+      --code-text: #e2e8f0;
+      --border: #e2e8f0;
+      --success: #38a169;
+      --warn: #d69e2e;
+      --danger: #e53e3e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    aside h1 {
+      margin: 0 20px 10px;
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    aside .ver {
+      margin: 0 20px 20px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav li a {
+      display: block;
+      padding: 6px 20px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+    }
+
+    nav li a:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    nav li a.section {
+      font-weight: 600;
+      margin-top: 8px;
+      color: var(--accent);
+    }
+
+    main {
+      padding: 30px 50px;
+      max-width: 980px;
+    }
+
+    main h1 {
+      margin-top: 0;
+      font-size: 28px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 8px;
+    }
+
+    main h2 {
+      margin-top: 40px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      font-size: 22px;
+      color: var(--accent);
+    }
+
+    main h3 {
+      margin-top: 28px;
+      font-size: 17px;
+      color: var(--text);
+    }
+
+    main h4 {
+      margin: 20px 0 8px;
+      font-size: 15px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    code {
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 13px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px 18px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--accent-light);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    td code {
+      font-size: 12px;
+    }
+
+    .api-block {
+      background: var(--panel);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .api-sig {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .api-sig .ns {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .api-desc {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 4px 0;
+    }
+
+    .params {
+      margin: 8px 0;
+      font-size: 12px;
+    }
+
+    .params .pname {
+      font-family: monospace;
+      color: var(--accent);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+
+    .tag-async {
+      background: #fef5e7;
+      color: var(--warn);
+    }
+
+    .tag-block {
+      background: #fff5f5;
+      color: var(--danger);
+    }
+
+    .tag-root {
+      background: #fef5e7;
+      color: var(--warn);
+    }
+
+    .tag-deps {
+      background: #ebf8ff;
+      color: var(--accent);
+    }
+
+    .callout {
+      background: #fffaf0;
+      border-left: 3px solid var(--warn);
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+    }
+
+    .callout.tip {
+      background: #ebf8ff;
+      border-left-color: var(--accent);
+    }
+
+    .callout.note {
+      background: #f0fff4;
+      border-left-color: var(--success);
+    }
+
+    .callout.danger {
+      background: #fff5f5;
+      border-left-color: var(--danger);
+    }
+
+    .callout strong {
+      color: inherit;
+    }
+
+    .example-snippet {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 14px 18px;
+      border-radius: 6px;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      overflow-x: auto;
+      margin: 12px 0;
+      white-space: pre;
+    }
+
+    .kw {
+      color: #f687b3;
+    }
+
+    .str {
+      color: #9ae6b4;
+    }
+
+    .num {
+      color: #f6ad55;
+    }
+
+    .cmt {
+      color: #718096;
+      font-style: italic;
+    }
+
+    .fn {
+      color: #63b3ed;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="layout">
+
+    <aside>
+      <h1>easyLua</h1>
+      <div class="ver">Stage I · LuaJIT 5.4 · Android root</div>
+      <nav>
+        <ul>
+          <li><a href="#intro" class="section">概览</a></li>
+          <li><a href="#quickstart">快速开始</a></li>
+
+          <li><a href="#screen" class="section">Screen</a></li>
+          <li><a href="#images" class="section">Images</a></li>
+          <li><a href="#color-format">- 颜色格式</a></li>
+          <li><a href="#findpic">- 找图（FindPic）</a></li>
+          <li><a href="#templates-cache"> · Templates 缓存</a></li>
+          <li><a href="#motion" class="section">Motion</a></li>
+          <li><a href="#ui" class="section">Ui</a></li>
+          <li><a href="#dialog" class="section">Dialog</a></li>
+          <li><a href="#app" class="section">App</a></li>
+          <li><a href="#device" class="section">Device</a></li>
+          <li><a href="#ime" class="section">IME</a></li>
+          <li><a href="#shell" class="section">Shell</a></li>
+          <li><a href="#lfs" class="section">lfs</a></li>
+          <li><a href="#cjson" class="section">cjson</a></li>
+          <li><a href="#utils" class="section">Utils</a></li>
+          <li><a href="#lifecycle" class="section">脚本生命周期</a></li>
+
+          <li><a href="#stdlib" class="section">LuaJIT 标准库</a></li>
+          <li><a href="#examples" class="section">示例</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+
+      <h1 id="intro">easyLua API 参考</h1>
+
+      <p>easyLua 是基于 <strong>LuaJIT 5.4 + Android root</strong> 的自动化引擎。所有 API 通过 LuaJIT FFI 直接调 native 实现。</p>
+
+      <p>命名规则：<strong>PascalCase</strong>，所有 API 都是顶层全局函数，脚本启动即可用，无需 <code>require</code> 或 <code>ffi.cdef</code>。</p>
+
+      <p>下方按功能分组（Screen / Images / Motion 等仅作为<strong>分类标签</strong>，不是命名空间前缀），调用时直接写函数名即可。例如
+        <code>FindColor(...)</code>、<code>Click(x, y)</code>、<code>Toast("hi")</code>。
+      </p>
+
+      <h2 id="quickstart">快速开始</h2>
+
+      <div class="example-snippet"><span class="cmt">-- 直接读屏（首次会自动等首帧到达，无需手动等）</span>
+        <span class="kw">local</span> x, y = <span class="fn">FindColor</span>(<span class="num">0</span>, <span
+          class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span
+          class="str">"FF3344-101010"</span>, <span class="num">0.95</span>, <span class="num">0</span>)
+        <span class="kw">if</span> x &gt;= <span class="num">0</span> <span class="kw">then</span>
+        <span class="fn">Highlight</span>(x - <span class="num">30</span>, y - <span class="num">30</span>, <span
+          class="num">60</span>, <span class="num">60</span>, <span class="str">"#FF0000"</span>, <span
+          class="num">2000</span>, <span class="str">"找到了"</span>)
+        <span class="fn">Click</span>(x, y)
+        <span class="fn">Toast</span>(<span class="str">"已点击 ("</span> .. x .. <span class="str">", "</span> .. y ..
+        <span class="str">")"</span>)
+        <span class="kw">end</span>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- Screen -->
+      <!-- ============================================================ -->
+
+      <h2 id="screen">Screen <small style="color:var(--muted); font-weight:normal">屏幕信息 + 像素读取</small></h2>
+
+      <div class="api-block">
+        <div class="api-sig">ScreenWidth()</div>
+        <div class="api-desc">当前帧的实际像素宽度（旋转后逻辑宽度）。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>int</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">ScreenHeight()</div>
+        <div class="api-desc">当前帧的实际像素高度。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>int</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">ScreenSeq()</div>
+        <div class="api-desc">帧序号。每收到一帧 +1，可用于检测"画面是否变化"。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>int</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">Pixel(x, y)</div>
+        <div class="api-desc">读取像素的 RGBA 4 通道值（0-255）。越界返回 0,0,0,0。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>r, g, b, a</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">PixelHex(x, y)</div>
+        <div class="api-desc">读取像素并格式化为 <code>"RRGGBB"</code> 字符串。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>string</code></div>
+      </div>
+
+      <div class="callout tip">
+        <strong>无需手动等首帧</strong>：所有读屏 API（<code>Width / Height / Pixel / Find* / Cmp* / GetColorCountInRegion</code>）
+        在视频流首帧未到达时会自动 <code>block</code> 等待最多 3 秒。脚本可以"上来就用"。
+      </div>
+
+      <h3>CaptureScreen <small style="color:var(--muted); font-weight:normal">帧快照</small></h3>
+
+      <p>
+        <code>CaptureScreen</code> 把当前帧的指定区域复制到一份独立 RGBA buffer，
+        返回一个**冻结**的快照对象。即使后续视频流推了新帧，也不会影响这份数据。
+        适用于：截图存盘、跨多帧对比、OCR / 模板匹配等耗时处理。
+      </p>
+
+      <div class="api-block">
+        <div class="api-sig">CaptureScreen(x1, y1, x2, y2)</div>
+        <div class="api-desc">
+          抓取区域 <code>(x1, y1)-(x2, y2)</code> 的快照。<code>x2 / y2 = 0</code> 或省略表示用屏幕边界，
+          完全省略所有参数即全屏抓取。
+        </div>
+        <div class="api-desc">
+          <strong>返回</strong>: <code>table</code> - 快照对象，挂有
+          <a href="#snapshot-methods">下方方法表</a>。失败时返回 <code>nil</code>
+          （视频流首帧未到 / 区域非法 / 内存不足）。
+          <br>
+          底层 RGBA buffer 由 LuaJIT GC 自动回收；也可显式调 <code>:Free()</code>，
+          或用 Lua 5.4 <code>&lt;close&gt;</code> 注解让作用域退出立即释放。
+        </div>
+      </div>
+
+      <h4 id="snapshot-methods">快照对象方法</h4>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 32%">方法</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>snap:Width()</code></td>
+            <td>快照宽度。返回 <code>int</code>。</td>
+          </tr>
+          <tr>
+            <td><code>snap:Height()</code></td>
+            <td>快照高度。返回 <code>int</code>。</td>
+          </tr>
+          <tr>
+            <td><code>snap:Pixel(x, y)</code></td>
+            <td>取像素 RGBA 4 通道值（0-255）。越界返回 <code>0, 0, 0, 0</code>。返回 <code>r, g, b, a</code>。</td>
+          </tr>
+          <tr>
+            <td><code>snap:PixelHex(x, y)</code></td>
+            <td>取像素 <code>"RRGGBB"</code> 字符串。返回 <code>string</code>。</td>
+          </tr>
+          <tr>
+            <td><code>snap:Save(path, type, quality)</code></td>
+            <td>
+              把快照保存到文件。
+              <ul style="margin: 6px 0; padding-left: 18px">
+                <li><code>path</code>：输出路径</li>
+                <li><code>type</code>：<code>"png"</code> / <code>"jpg"</code>（亦作 <code>"jpeg"</code>）/
+                  <code>"bmp"</code>，
+                  省略时按 <code>path</code> 后缀自动推断（识别 <code>.png / .jpg / .jpeg / .bmp</code>）
+                </li>
+                <li><code>quality</code>：仅对 JPG 生效，1..100；省略 / &lt;= 0 取默认 90</li>
+              </ul>
+              返回 <code>bool</code>，未识别格式或写文件失败时返回 <code>false</code>。
+            </td>
+          </tr>
+          <tr>
+            <td><code>snap:Free()</code></td>
+            <td>立即释放底层 buffer，不必等 GC。释放后所有访问返回零值，重复调用安全。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout tip">
+        <strong>自动释放</strong>：以下三种方式都不需要手动调 <code>:Free()</code>。
+        <ul style="margin: 6px 0; padding-left: 18px">
+          <li><strong>GC 兜底</strong>：脚本不持有引用后，下次 GC 触发时底层 buffer 自动归还，不会泄漏。</li>
+          <li><strong><code>&lt;close&gt;</code> 注解（推荐）</strong>：作用域退出（<code>do</code> block 结束、函数
+            <code>return</code>、<code>error</code> 抛出）立即释放，不等 GC。
+            <pre style="margin-top: 6px"><span class="kw">local</span> snap &lt;<span class="kw">close</span>&gt; = <span class="fn">CaptureScreen</span>()
+snap:<span class="fn">Save</span>(<span class="str">"/sdcard/x.png"</span>)
+<span class="cmt">-- 函数返回时 snap 立即释放</span></pre>
+          </li>
+          <li><strong>显式 <code>:Free()</code></strong>：精确控制时机，最直观。</li>
+        </ul>
+      </div>
+
+      <div class="example-snippet"><span class="cmt">-- 全屏抓帧</span>
+        <span class="kw">local</span> snap = <span class="fn">CaptureScreen</span>()
+        <span class="fn">print</span>(snap:<span class="fn">Width</span>(), snap:<span class="fn">Height</span>())
+
+        <span class="cmt">-- 抓某个区域并跨帧使用</span>
+        <span class="kw">local</span> sub = <span class="fn">CaptureScreen</span>(<span class="num">100</span>, <span
+          class="num">200</span>, <span class="num">400</span>, <span class="num">600</span>)
+        <span class="fn">Sleep</span>(<span class="num">500</span>) <span class="cmt">-- 等动画结束，屏幕已经变了</span>
+        <span class="kw">local</span> r, g, b = sub:<span class="fn">Pixel</span>(<span class="num">0</span>, <span
+          class="num">0</span>) <span class="cmt">-- 仍是抓取时的颜色</span>
+        sub:<span class="fn">Free</span>() <span class="cmt">-- 显式释放（可省）</span>
+
+        <span class="cmt">-- 一行截屏存盘（type 按后缀推断）</span>
+        <span class="fn">CaptureScreen</span>():<span class="fn">Save</span>(<span
+          class="str">"/sdcard/shot.png"</span>)
+        <span class="fn">CaptureScreen</span>():<span class="fn">Save</span>(<span
+          class="str">"/sdcard/shot.jpg"</span>, <span class="kw">nil</span>, <span class="num">85</span>)
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- Images -->
+      <!-- ============================================================ -->
+
+      <h2 id="images">Images <small style="color:var(--muted); font-weight:normal">找色 / 比色</small></h2>
+
+      <h3 id="color-format">颜色字符串格式</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>格式</th>
+            <th>含义</th>
+            <th>例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>RRGGBB</code></td>
+            <td>精确颜色</td>
+            <td><code>"FF3344"</code></td>
+          </tr>
+          <tr>
+            <td><code>RRGGBB-RRGGBB</code></td>
+            <td>带容差，后半段为 R/G/B 各通道允许偏移</td>
+            <td><code>"FF3344-101010"</code></td>
+          </tr>
+          <tr>
+            <td><code>C1|C2|C3</code></td>
+            <td>多候选 OR（命中任一即可）</td>
+            <td><code>"FF0000|00FF00|0000FF"</code></td>
+          </tr>
+          <tr>
+            <td><code>x,y,c,x,y,c,...</code></td>
+            <td>多点 AND（DetectsMultiColors 用）</td>
+            <td><code>"100,200,FF0000-101010"</code></td>
+          </tr>
+          <tr>
+            <td><code>base,dx,dy,c,...</code></td>
+            <td>基色+相对点（FindMultiColors 用）</td>
+            <td><code>"FF3344,7,0,EE2233-101010"</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><code>sim</code> 参数（0~1.0）会再附加 <code>(1-sim)*255</code> 容差到所有通道。</p>
+
+      <h3>方向参数 dir（FindColor / FindMultiColors）</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>dir</th>
+            <th>扫描顺序</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>0</code></td>
+            <td>左→右，上→下（默认）</td>
+          </tr>
+          <tr>
+            <td><code>1</code></td>
+            <td>右→左，上→下</td>
+          </tr>
+          <tr>
+            <td><code>2</code></td>
+            <td>左→右，下→上</td>
+          </tr>
+          <tr>
+            <td><code>3</code></td>
+            <td>右→左，下→上</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>API</h3>
+
+      <div class="api-block">
+        <div class="api-sig">CmpColor(x, y, color, sim)</div>
+        <div class="api-desc">测试单点是否匹配颜色。color 可以是单值 / 带容差 / 多候选。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>bool</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">FindColor(x1, y1, x2, y2, color, sim, dir)</div>
+        <div class="api-desc">在区域内找颜色，返回首个命中坐标。<code>x2/y2 = 0</code> 表示用屏幕边界。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>x, y</code> - 找不到返回 -1, -1</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">GetColorCountInRegion(x1, y1, x2, y2, color, sim)</div>
+        <div class="api-desc">统计区域内符合颜色的像素数量。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>int</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">DetectsMultiColors(colors, sim)</div>
+        <div class="api-desc">多点比色：所有点位都命中才返回 true。</div>
+        <div class="api-desc"><strong>colors 格式</strong>: <code>"x1,y1,RRGGBB-tol,x2,y2,..."</code></div>
+        <div class="api-desc"><strong>返回</strong>: <code>bool</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">FindMultiColors(x1, y1, x2, y2, colors, sim, dir)</div>
+        <div class="api-desc">基色全屏扫描 + 相对偏移点验证。基色命中后再校验所有相对点全部命中才算找到。</div>
+        <div class="api-desc"><strong>colors 格式</strong>:
+          <code>"base[-tol],dx1,dy1,c1[-tol],dx2,dy2,c2[-tol],..."</code>
+        </div>
+        <div class="api-desc"><strong>返回</strong>: <code>x, y</code> - 找不到返回 -1, -1</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">FindMultiColorsAll(x1, y1, x2, y2, colors, sim, dir)</div>
+        <div class="api-desc">找区域内所有匹配位置。每命中一个会屏蔽 bbox 矩形避免重复。最多 256 个。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>{ {x=,y=}, ... }</code></div>
+      </div>
+
+      <div class="callout tip">
+        <strong>截屏存盘</strong>
+        <p>
+          easyLua 不直接在找色这块提供存盘 API。请用
+          <a href="#screen"><code>CaptureScreen()</code></a> 抓帧得到快照对象，
+          再调 <code>:Save(path, type, quality)</code> 写入文件。<code>type</code> 省略时按
+          <code>path</code> 后缀推断，支持 <code>png</code> / <code>jpg</code> / <code>bmp</code>。
+        </p>
+      </div>
+
+      <div class="example-snippet"><span class="cmt">-- 全屏存 PNG（按后缀推断 type）</span>
+        <span class="fn">CaptureScreen</span>():<span class="fn">Save</span>(<span
+          class="str">"/sdcard/shot.png"</span>)
+
+        <span class="cmt">-- 全屏存 JPG，质量 85</span>
+        <span class="fn">CaptureScreen</span>():<span class="fn">Save</span>(<span
+          class="str">"/sdcard/shot.jpg"</span>, <span class="kw">nil</span>, <span class="num">85</span>)
+
+        <span class="cmt">-- 抓某区域，显式指定 type</span>
+        <span class="fn">CaptureScreen</span>(<span class="num">100</span>, <span class="num">200</span>, <span
+          class="num">400</span>, <span class="num">600</span>):<span class="fn">Save</span>(<span
+          class="str">"/sdcard/sub.bmp"</span>, <span class="str">"bmp"</span>)
+      </div>
+
+      <div class="callout tip">
+        <strong>使用提示</strong>：
+        <ul>
+          <li>选择罕见 / 高对比度的基色（如发光按钮、纯色 logo），避免黑 / 白 / 灰</li>
+          <li>多点（≥3）相对点可以把误判降到几乎 0</li>
+          <li>定位过坐标后，用 <code>DetectsMultiColors</code> 在循环里持续验证；不需要每次都重新 <code>Find</code></li>
+        </ul>
+      </div>
+
+      <h3 id="findpic">找图 <small style="color:var(--muted); font-weight:normal">LoadTemplate / FindPic /
+          FindPicAll</small></h3>
+
+      <p>
+        基于<strong>两段式 SAD（绝对差和）</strong>的模板匹配：先用最多 12 个高对比特征点稀疏预筛淘汰大多数候选位置，再对全部 valid 像素累加 SAD 并按相似度阈值早退。
+        相比找色，找图能直接以图片为目标，适合按钮图标、UI 元素等"形状已知"的场景。
+      </p>
+
+      <div class="callout note">
+        <strong>透明像素自动识别</strong>：
+        <ul style="margin: 6px 0; padding-left: 18px">
+          <li><strong>Alpha 通道</strong>：PNG 中 <code>alpha &lt; 128</code> 的像素视为透明，不参与匹配。</li>
+          <li><strong>四角同色 color key</strong>：PNG / BMP 模板四角四像素 RGB 严格相等时，自动把该颜色视作背景透明键（JPG 不启用，避免压缩噪点误识别）。</li>
+          <li>透明像素既不进 SAD 累加，也不算入相似度分母。零配置即可处理"非矩形"按钮图标。</li>
+        </ul>
+      </div>
+
+      <h4>API</h4>
+
+      <div class="api-block">
+        <div class="api-sig">LoadTemplate(path)</div>
+        <div class="api-desc">从文件加载模板并完成预处理（解码 + 透明判定 + 特征点选取）。一次加载，多次复用。支持 <code>.png</code> / <code>.bmp</code> /
+          <code>.jpg</code>，加密资源（<code>.enc</code>）会自动透明解密。
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 28%">参数</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>path</code></td>
+              <td>模板图片路径。绝对路径或相对脚本目录均可。</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="api-desc">
+          <strong>返回</strong>: <code>tpl</code> - 模板对象。失败返回 <code>nil</code>（文件不存在 / 解码失败 / 全透明 / 尺寸越界 / 内存不足）。
+          <br>
+          底层 cdata 由 LuaJIT GC 自动回收；也可显式调 <code>tpl:Free()</code>，或用 Lua 5.4 <code>&lt;close&gt;</code> 注解让作用域退出立即释放。
+        </div>
+      </div>
+
+      <h4>模板对象方法</h4>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 32%">方法</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>tpl:Width()</code></td>
+            <td>模板宽度。返回 <code>int</code>。</td>
+          </tr>
+          <tr>
+            <td><code>tpl:Height()</code></td>
+            <td>模板高度。返回 <code>int</code>。</td>
+          </tr>
+          <tr>
+            <td><code>tpl:ValidPx()</code></td>
+            <td>有效像素数（剔除透明后参与匹配的像素数）。返回 <code>int</code>，调试用。</td>
+          </tr>
+          <tr>
+            <td><code>tpl:Free()</code></td>
+            <td>立即释放模板。释放后不应再传给 FindPic / FindPicAll，重复调用安全。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="api-block">
+        <div class="api-sig">FindPic(x1, y1, x2, y2, tpl, sim, dir)</div>
+        <div class="api-desc">在区域内查找模板的左上角坐标，返回首个命中位置。<code>x2 / y2 = 0</code> 表示用屏幕边界。扫描方向语义与 <code>FindColor</code>
+          一致。</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%">参数</th>
+              <th style="width: 16%">默认值</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>x1, y1, x2, y2</code></td>
+              <td>—</td>
+              <td>扫描区域，<code>x2 / y2 = 0</code> 表示扩展到屏幕边界。</td>
+            </tr>
+            <tr>
+              <td><code>tpl</code></td>
+              <td>—</td>
+              <td>
+                <strong>三种类型可选</strong>：
+                <ul style="margin: 4px 0; padding-left: 18px">
+                  <li><strong>字符串文件名</strong>（推荐）：如 <code>"1.png"</code>，自动按 <code>Templates.dir</code> 解析并缓存</li>
+                  <li><code>LoadTemplate</code> 返回的模板对象</li>
+                  <li><code>Templates.get(name)</code> 返回的模板对象</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td><code>sim</code></td>
+              <td><code>0.9</code></td>
+              <td>相似度阈值，<code>[0, 1]</code>。<code>1.0</code> 要求像素完全一致；<code>0.9</code> 适合一般 UI 匹配。</td>
+            </tr>
+            <tr>
+              <td><code>dir</code></td>
+              <td><code>0</code></td>
+              <td>扫描方向 0..3，参考<a href="#images">上方方向参数表</a>。非法值视为未命中。</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="api-desc"><strong>返回</strong>: <code>x, y</code> - 模板左上角坐标。找不到 / 模板比扫描区还大 / 帧未就绪 / 模板文件不存在时返回
+          <code>-1, -1</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">FindPicAll(x1, y1, x2, y2, tpl, sim)</div>
+        <div class="api-desc">找区域内所有匹配位置。每命中一个会屏蔽该模板尺寸的矩形避免重复。最多 256 个屏蔽矩形（命中数本身不限于 256）。</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%">参数</th>
+              <th style="width: 16%">默认值</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>x1, y1, x2, y2</code></td>
+              <td>—</td>
+              <td>扫描区域，<code>x2 / y2 = 0</code> 表示扩展到屏幕边界。</td>
+            </tr>
+            <tr>
+              <td><code>tpl</code></td>
+              <td>—</td>
+              <td>支持字符串文件名（按 <code>Templates.dir</code> 解析）或 <code>LoadTemplate</code> / <code>Templates.get</code>
+                返回的模板对象。</td>
+            </tr>
+            <tr>
+              <td><code>sim</code></td>
+              <td><code>0.9</code></td>
+              <td>相似度阈值，<code>[0, 1]</code>。</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="api-desc"><strong>返回</strong>: <code>{ {x=, y=}, ... }</code> - 命中点数组（左上角坐标）。无命中返回空表
+          <code>{}</code>。
+        </div>
+      </div>
+
+      <h4 id="templates-cache">Templates（模板缓存）</h4>
+
+      <p>
+        <code>FindPic</code> / <code>FindPicAll</code> 接受字符串文件名时，背后走 <code>Templates</code> 缓存层：首次自动
+        <code>LoadTemplate</code>，之后纯查表。脚本里通常完全不用感知，只有需要切换素材根目录或主动预加载时才用得上下面的 API。
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 32%">字段 / 方法</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Templates.dir</code></td>
+            <td>当前模板搜索根目录。默认值由 <code>_easyLua_bootstrap.entry</code> 推导（脚本所在目录），找不到则回退到
+              <code>/data/local/tmp/easyLua/scripts</code> 或 <code>/data/local/tmp/easyLua</code>。
+            </td>
+          </tr>
+          <tr>
+            <td><code>Templates.set_dir(new_dir)</code></td>
+            <td>切换搜索根目录，并清空已缓存的模板（旧模板对象保持有效，直到 GC）。返回 <code>true</code> 或 <code>false, err</code>。</td>
+          </tr>
+          <tr>
+            <td><code>Templates.get(name)</code></td>
+            <td>按文件名取（或加载并缓存）模板对象。解析顺序：原样路径 → <code>Templates.dir/name</code> → 子目录递归（最多 4 层）。失败返回
+              <code>nil, err</code>。
+            </td>
+          </tr>
+          <tr>
+            <td><code>Templates.preload()</code></td>
+            <td>遍历 <code>Templates.dir</code> 加载所有 <code>.png</code> / <code>.bmp</code> / <code>.jpg</code> /
+              <code>.jpeg</code>（递归最多 6 层）。返回 <code>ok_n, fail_n</code>。脚本启动时调用一次可消除首次 <code>FindPic</code> 的 IO 抖动。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout note">
+        <strong>解析路径</strong>：<code>FindPic(0, 0, 0, 0, "1.png")</code> 找文件的顺序——
+        <ol style="margin: 6px 0; padding-left: 22px">
+          <li>原样路径（绝对路径或相对 cwd）</li>
+          <li><code>Templates.dir/1.png</code></li>
+          <li><code>Templates.dir</code> 子目录递归（最多 4 层）</li>
+        </ol>
+        命中即缓存，后续同名文件直接零开销查表。<code>Templates.set_dir(new)</code> 会清空缓存，但旧模板对象本身仍可继续使用。
+      </div>
+
+      <div class="callout tip">
+        <strong>生命周期与 <code>&lt;close&gt;</code></strong>：
+        <ul style="margin: 6px 0; padding-left: 18px">
+          <li><strong>持久复用</strong>：把 <code>tpl</code> 放进 upvalue 或全局，整个脚本周期复用，避免重复解码。</li>
+          <li><strong>临时模板</strong>：用 Lua 5.4 <code>&lt;close&gt;</code> 注解让作用域退出立即释放，不必等 GC。</li>
+        </ul>
+        <pre style="margin-top: 6px"><span class="kw">do</span>
+  <span class="kw">local</span> tmp &lt;<span class="kw">close</span>&gt; = <span class="fn">LoadTemplate</span>(<span class="str">"/sdcard/cache/captured.png"</span>)
+  <span class="fn">Log</span>(<span class="str">"valid="</span> .. tmp:<span class="fn">ValidPx</span>())
+<span class="kw">end</span> <span class="cmt">-- tmp 立即释放</span></pre>
+      </div>
+
+      <div class="example-snippet"><span class="cmt">-- 推荐用法：直接传文件名字符串，背后走 Templates 缓存</span>
+        <span class="cmt">-- assets/scripts/&lt;name&gt;/btn_ok.png 部署后会出现在 Templates.dir 同级</span>
+        <span class="kw">local</span> x, y = <span class="fn">FindPic</span>(<span class="num">0</span>, <span
+          class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span
+          class="str">"btn_ok.png"</span>)
+        <span class="kw">if</span> x ~= <span class="num">-1</span> <span class="kw">then</span> <span
+          class="fn">Click</span>(x + <span class="num">40</span>, y + <span class="num">40</span>) <span
+          class="kw">end</span>
+
+        <span class="cmt">-- 启动时主动加载所有图（消除首次 FindPic 的 IO 抖动）</span>
+        <span class="fn">Templates</span>.<span class="fn">preload</span>()
+
+        <span class="cmt">-- 切到自定义素材库</span>
+        <span class="fn">Templates</span>.<span class="fn">set_dir</span>(<span class="str">"/sdcard/MyAssets"</span>)
+        <span class="kw">local</span> btn = <span class="fn">Templates</span>.<span class="fn">get</span>(<span
+          class="str">"1.png"</span>)
+        <span class="fn">print</span>(btn:<span class="fn">Width</span>(), btn:<span class="fn">Height</span>(),
+        btn:<span class="fn">ValidPx</span>())
+
+        <span class="cmt">-- 老用法仍兼容：手动 LoadTemplate</span>
+        <span class="kw">local</span> btn2 = <span class="fn">LoadTemplate</span>(<span
+          class="str">"ui/btn_ok.png"</span>)
+        <span class="kw">if not</span> btn2 <span class="kw">then</span> <span class="fn">Toast</span>(<span
+          class="str">"找不到模板"</span>); <span class="kw">return</span> <span class="kw">end</span>
+        <span class="kw">local</span> x2, y2 = <span class="fn">FindPic</span>(<span class="num">0</span>, <span
+          class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, btn2, <span
+          class="num">0.95</span>, <span class="num">1</span>)
+
+        <span class="cmt">-- 找全部，批量点击</span>
+        <span class="kw">for</span> _, p <span class="kw">in</span> <span class="fn">ipairs</span>(<span
+          class="fn">FindPicAll</span>(<span class="num">0</span>, <span class="num">0</span>, <span
+          class="num">0</span>, <span class="num">0</span>, <span class="str">"btn_ok.png"</span>)) <span
+          class="kw">do</span>
+        <span class="fn">Click</span>(p.x + <span class="num">40</span>, p.y + <span class="num">40</span>)
+        <span class="fn">Sleep</span>(<span class="num">80</span>)
+        <span class="kw">end</span>
+      </div>
+
+      <div class="callout tip">
+        <strong>性能与精度建议</strong>：
+        <ul style="margin: 6px 0; padding-left: 18px">
+          <li>模板尺寸越小越快。1080p 全屏单线程下：50×50 ≤ 15ms，100×100 ≤ 30ms，200×200 ≤ 60ms。</li>
+          <li><code>sim</code> 越高越快（早退更激进），但容错越低。一般 UI 取 <code>0.9</code>，要求精确取 <code>0.95+</code>。</li>
+          <li>JPG 模板会被强制禁用 color key（避免压缩噪点误识别），如果需要透明背景请用 PNG。</li>
+          <li>模板比扫描区还大时直接返回失败，不会越界扫描。</li>
+        </ul>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- Motion -->
+      <!-- ============================================================ -->
+
+      <h2 id="motion">Motion <small style="color:var(--muted); font-weight:normal">触摸事件注入（uinput）</small></h2>
+
+      <div class="callout note">
+        <strong>需要 root</strong>：触摸通过 /dev/uinput 注入虚拟触摸设备。首次调用 <code>Click / Swipe / TouchDown</code> 等时会自动初始化，无需手动调。
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">Click(x, y, duration) <span class="tag tag-block">阻塞</span>
+          <span class="tag tag-root">root</span>
+        </div>
+        <div class="api-desc">单点点击。<code>duration</code> 默认 50ms，按下到抬起的间隔。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>bool</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">LongClick(x, y, duration) <span class="tag tag-block">阻塞</span> <span
+            class="tag tag-root">root</span></div>
+        <div class="api-desc">长按。等价 <code>Click(x, y, duration or 800)</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">Swipe(x1, y1, x2, y2, duration) <span class="tag tag-block">阻塞</span> <span
+            class="tag tag-root">root</span></div>
+        <div class="api-desc">直线滑动。<code>duration</code> 默认 300ms。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">SwipeBezier(x1, y1, x2, y2, duration) <span class="tag tag-block">阻塞</span> <span
+            class="tag tag-root">root</span></div>
+        <div class="api-desc">贝塞尔曲线滑动，更接近真人。</div>
+      </div>
+
+      <h3>多指 / 自定义手势</h3>
+
+      <div class="api-block">
+        <div class="api-sig">TouchDown(x, y, finger) <span class="tag tag-root">root</span>
+        </div>
+        <div class="api-desc">指定手指按下。<code>finger</code> 是 slot（0-9，默认 0）。配合 <code>TouchMove</code> /
+          <code>TouchUp</code> 自定义手势。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">TouchMove(x, y, finger) <span class="tag tag-root">root</span>
+        </div>
+        <div class="api-desc">指定手指移动到新位置。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">TouchUp(finger) <span class="tag tag-root">root</span></div>
+        <div class="api-desc">抬起指定手指。</div>
+      </div>
+
+      <div class="example-snippet"><span class="cmt">-- 自定义手势：双指捏合（缩小）</span>
+        <span class="fn">TouchDown</span>(<span class="num">300</span>, <span class="num">800</span>, <span
+          class="num">0</span>) <span class="cmt">-- 手指 0 起点</span>
+        <span class="fn">TouchDown</span>(<span class="num">700</span>, <span class="num">800</span>, <span
+          class="num">1</span>) <span class="cmt">-- 手指 1 起点</span>
+        <span class="kw">for</span> i = <span class="num">1</span>, <span class="num">10</span> <span
+          class="kw">do</span>
+        <span class="fn">TouchMove</span>(<span class="num">300</span> + i * <span class="num">10</span>, <span
+          class="num">800</span>, <span class="num">0</span>)
+        <span class="fn">TouchMove</span>(<span class="num">700</span> - i * <span class="num">10</span>, <span
+          class="num">800</span>, <span class="num">1</span>)
+        <span class="fn">Sleep</span>(<span class="num">20</span>)
+        <span class="kw">end</span>
+        <span class="fn">TouchUp</span>(<span class="num">0</span>)
+        <span class="fn">TouchUp</span>(<span class="num">1</span>)
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- Ui -->
+      <!-- ============================================================ -->
+
+      <h2 id="ui">Ui <small style="color:var(--muted); font-weight:normal">屏幕浮窗</small></h2>
+
+      <div class="callout note">
+        <strong>架构说明</strong>：
+        <ul>
+          <li><strong>Highlight</strong>：root 进程内 Canvas 自绘，独立 WindowManager 浮窗，不依赖任何 APK</li>
+          <li><strong>Toast</strong>：通过 <code>am broadcast</code> 触发 SampleUI APK 的 ToastReceiver 弹原生 Toast。需要安装
+            SampleUI APK，但 APK 不需要在前台运行</li>
+        </ul>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">Toast(msg, x, y, dur) <span class="tag tag-deps">需
+            SampleUI</span></div>
+        <div class="api-desc">显示系统原生 Toast。<code>x, y</code> 当前实现忽略（系统 Toast 不支持精确坐标），<code>dur</code> &lt; 3500 用
+          SHORT，否则 LONG。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">Highlight(x, y, w, h, color, dur, label) <span class="tag tag-async">异步</span></div>
+        <div class="api-desc">显示空心矩形高亮（SikuliX 风格）。多个 highlight 可同时存在，到时间自动消失。</div>
+        <div class="params">
+          <div><span class="pname">color</span>: 字符串 <code>"#RRGGBB"</code> / <code>"#AARRGGBB"</code> 或数字 ARGB；省略 = 红色
+          </div>
+          <div><span class="pname">dur</span>: 显示时长 ms（默认 2000，<code>&lt;= 0</code> 表示常驻直到 HighlightOff）</div>
+          <div><span class="pname">label</span>: 矩形上方的文字标签（可省）</div>
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">HighlightOff()</div>
+        <div class="api-desc">立即清掉所有 highlight。</div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- Dialog -->
+      <!-- ============================================================ -->
+
+      <h2 id="dialog">Dialog <small style="color:var(--muted); font-weight:normal">启动前配置弹窗</small></h2>
+
+      <div class="callout note">
+        <strong>工作机制</strong>：Dialog 不是脚本运行时调用的 API，而是<strong>脚本启动前</strong>由 SampleUI APK 弹出的配置对话框，
+        让用户先填好账号、模式、阈值等参数，再 fork 脚本进程。
+        <ul>
+          <li>在脚本同级放一个 <code>ui.lua</code>（声明式 DSL），SampleUI 会在用户点 ▶ 时解析它并弹出 <code>AlertDialog</code></li>
+          <li>用户点"确定"后，<strong>填写的值会回写到 <code>ui.lua</code> 自身的 default 参数</strong>，下次启动直接看到上次的选择</li>
+          <li>脚本里直接解析 <code>ui.lua</code> 就能拿到当前生效的配置（不再走中间的 JSON 文件）</li>
+          <li>用户点"取消"则脚本不启动，悬浮球回到 ▶ 停止态</li>
+          <li>没有 <code>ui.lua</code> 文件时直接跳过，不弹任何窗口</li>
+        </ul>
+      </div>
+
+      <h3>ui.lua 顶层元信息</h3>
+
+      <div class="api-block">
+        <div class="api-sig">dialogTitle(text)</div>
+        <div class="api-desc">设置对话框标题。省略时为 <code>"设置"</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">dialogSize(widthDp, heightDp)</div>
+        <div class="api-desc">指定弹窗尺寸（dp）。<code>0</code>=自适应，<code>-1</code>=MATCH_PARENT，<code>-2</code>=WRAP_CONTENT。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">dialogSizePercent(widthPct, heightPct)</div>
+        <div class="api-desc">按屏幕百分比设置尺寸（0~1）。例如 <code>dialogSizePercent(0.9, 0.7)</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">dialogPosition(gravity)</div>
+        <div class="api-desc">弹窗位置。可选 <code>"center" / "top" / "bottom" / "left" / "right"</code>，
+          以及组合 <code>"top-left" / "top-right" / "bottom-left" / "bottom-right"</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">dialogOffset(xDp, yDp)</div>
+        <div class="api-desc">在 <code>dialogPosition</code> 基础上的偏移量（dp）。</div>
+      </div>
+
+      <h3>容器（可嵌套）</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>函数</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>beginGroup(title)</code> / <code>endGroup()</code></td>
+            <td>带标题的圆角分组卡片</td>
+          </tr>
+          <tr>
+            <td><code>beginRow()</code> / <code>endRow()</code></td>
+            <td>水平排列的一行（多个控件并排）</td>
+          </tr>
+          <tr>
+            <td><code>beginTabs()</code> / <code>endTabs()</code></td>
+            <td>标签页容器，里面嵌 <code>beginTab/endTab</code></td>
+          </tr>
+          <tr>
+            <td><code>beginTab(title)</code> / <code>endTab()</code></td>
+            <td>单个标签页，仅在 <code>beginTabs</code> 内有效</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>控件</h3>
+
+      <p>每种控件最多接收 4 个参数。带 <code>varName</code> 的控件值会被回写到 <code>ui.lua</code> 自身的 default 参数；没有 <code>varName</code> 的（如
+        TextView）只是装饰。</p>
+
+      <div class="api-block">
+        <div class="api-sig">addTextView(text)</div>
+        <div class="api-desc">静态文本，不收集结果。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addSeparator()</div>
+        <div class="api-desc">水平分割线。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addCheckBox(varName, label, default)</div>
+        <div class="api-desc">复选框。结果类型：<code>boolean</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addEditText(varName, label, default)</div>
+        <div class="api-desc">文本输入框。结果类型：<code>string</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addEditNumber(varName, label, default)</div>
+        <div class="api-desc">数字输入框（接受小数 / 负数）。结果类型：<code>number</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addSpinner(varName, label, options, default)</div>
+        <div class="api-desc">下拉选择。<code>options</code> 是字符串列表 <code>{"快速","普通","慢速"}</code>，<code>default</code>
+          是其中之一。结果类型：<code>string</code>（被选中的文本）。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addRadioGroup(varName, label, options, default)</div>
+        <div class="api-desc">单选组。参数同 <code>addSpinner</code>。结果类型：<code>string</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addSeekBar(varName, label, min, max, default)</div>
+        <div class="api-desc">滑块。<code>addSlider</code> 是兼容别名。结果类型：<code>number</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addProgressBar(varName, label, min, max, default)</div>
+        <div class="api-desc">进度条（只读展示，可被脚本运行时刷新）。结果类型：<code>number</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addDatePicker(varName, label, default)</div>
+        <div class="api-desc">日期选择器。<code>default</code> 格式 <code>"yyyy-MM-dd"</code>，留空 = 今天。结果类型：<code>string</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addTimePicker(varName, label, default)</div>
+        <div class="api-desc">时间选择器。<code>default</code> 格式 <code>"HH:mm"</code>，留空 = 当前时间。结果类型：<code>string</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addColorButton(varName, label, default)</div>
+        <div class="api-desc">颜色按钮，点击弹色板。<code>default</code> 格式 <code>"#RRGGBB"</code>。结果类型：<code>string</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">addImage(assetPath, widthDp, heightDp)</div>
+        <div class="api-desc">显示一张图片（来自部署目录或 assets）。装饰用，不收集结果。</div>
+      </div>
+
+      <h3>修饰符 <small style="color:var(--muted); font-weight:normal">作用于紧邻其上的控件</small></h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>函数</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>setWeight(weight)</code></td>
+            <td>在 <code>beginRow</code> 内分配剩余空间权重</td>
+          </tr>
+          <tr>
+            <td><code>setHint(text)</code></td>
+            <td>给输入框加占位提示</td>
+          </tr>
+          <tr>
+            <td><code>setMargin(topDp, bottomDp)</code></td>
+            <td>上下外边距（dp）</td>
+          </tr>
+          <tr>
+            <td><code>setColor(hex)</code></td>
+            <td>设置文字颜色 <code>"#RRGGBB"</code></td>
+          </tr>
+          <tr>
+            <td><code>setTextSize(sp)</code></td>
+            <td>设置文字大小（sp）</td>
+          </tr>
+          <tr>
+            <td><code>setEnabled(bool)</code></td>
+            <td>是否可交互</td>
+          </tr>
+          <tr>
+            <td><code>setVisible(bool)</code></td>
+            <td>初始可见性</td>
+          </tr>
+          <tr>
+            <td><code>bindVisible(checkboxVar)</code></td>
+            <td>跟随某个 checkbox 状态自动显示 / 隐藏</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>ui.lua 例子</h3>
+
+      <div class="example-snippet"><span class="cmt">-- ui.lua（声明式 DSL，每行一条调用，不会被 LuaJIT 执行）</span>
+        <span class="fn">dialogTitle</span>(<span class="str">"挂机配置"</span>)
+        <span class="fn">dialogSizePercent</span>(<span class="num">0.9</span>, <span class="num">0</span>)
+
+        <span class="fn">beginGroup</span>(<span class="str">"账号"</span>)
+        <span class="fn">addEditText</span>(<span class="str">"account"</span>, <span class="str">"账号"</span>, <span
+          class="str">""</span>)
+        <span class="fn">setHint</span>(<span class="str">"请输入账号"</span>)
+        <span class="fn">addEditText</span>(<span class="str">"password"</span>, <span class="str">"密码"</span>, <span
+          class="str">""</span>)
+        <span class="fn">endGroup</span>()
+
+        <span class="fn">beginGroup</span>(<span class="str">"运行模式"</span>)
+        <span class="fn">addRadioGroup</span>(<span class="str">"mode"</span>, <span class="str">"难度"</span>, {<span
+          class="str">"简单"</span>, <span class="str">"普通"</span>, <span class="str">"困难"</span>}, <span
+          class="str">"普通"</span>)
+        <span class="fn">addSeekBar</span>(<span class="str">"speed"</span>, <span class="str">"速度"</span>, <span
+          class="num">1</span>, <span class="num">100</span>, <span class="num">50</span>)
+
+        <span class="fn">addCheckBox</span>(<span class="str">"autoRetry"</span>, <span class="str">"失败自动重试"</span>,
+        <span class="kw">true</span>)
+        <span class="fn">addEditNumber</span>(<span class="str">"retryCount"</span>, <span class="str">"重试次数"</span>,
+        <span class="num">3</span>)
+        <span class="fn">bindVisible</span>(<span class="str">"autoRetry"</span>) <span class="cmt">-- 勾选 autoRetry
+          才显示</span>
+        <span class="fn">endGroup</span>()
+
+        <span class="fn">beginRow</span>()
+        <span class="fn">addDatePicker</span>(<span class="str">"startDate"</span>, <span class="str">"开始日期"</span>,
+        <span class="str">""</span>)
+        <span class="fn">setWeight</span>(<span class="num">1</span>)
+        <span class="fn">addTimePicker</span>(<span class="str">"startTime"</span>, <span class="str">"时间"</span>, <span
+          class="str">"08:00"</span>)
+        <span class="fn">setWeight</span>(<span class="num">1</span>)
+        <span class="fn">endRow</span>()
+      </div>
+
+      <h3>在 main.lua 中读取结果</h3>
+
+      <p>用户点确定后，<strong>填写的值会原地写回到 <code>ui.lua</code> 的 default 参数</strong>。
+        runtime.lua 启动时已经自动 <code>dofile(ui.lua)</code> 把所有带 <code>varName</code> 的控件值收进
+        <strong>全局 <code>Config</code> 表</strong>，脚本里直接用即可：
+      </p>
+
+      <div class="example-snippet"><span class="cmt">-- ui.lua 中 default 写过的字段全在 Config 里，类型已自动归一化</span>
+        <span class="fn">print</span>(<span class="str">"账号="</span> .. (Config.account <span class="kw">or</span> <span
+          class="str">""</span>))
+        <span class="fn">print</span>(<span class="str">"难度="</span> .. (Config.mode <span class="kw">or</span> <span
+          class="str">""</span>))
+        <span class="fn">print</span>(<span class="str">"速度="</span> .. (Config.speed <span class="kw">or</span> <span
+          class="num">0</span>))
+        <span class="kw">if</span> Config.autoRetry <span class="kw">then</span>
+        <span class="fn">print</span>(<span class="str">"启用自动重试，次数="</span> .. (Config.retryCount <span
+          class="kw">or</span> <span class="num">0</span>))
+        <span class="kw">end</span>
+      </div>
+
+      <h4>类型映射</h4>
+
+      <table>
+        <thead>
+          <tr>
+            <th>控件</th>
+            <th><code>Config[varName]</code> 类型</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>addCheckBox</code></td>
+            <td><code>boolean</code></td>
+          </tr>
+          <tr>
+            <td><code>addEditText</code></td>
+            <td><code>string</code></td>
+          </tr>
+          <tr>
+            <td><code>addEditNumber</code> / <code>addSeekBar</code> / <code>addSlider</code> /
+              <code>addProgressBar</code>
+            </td>
+            <td><code>number</code></td>
+          </tr>
+          <tr>
+            <td><code>addSpinner</code> / <code>addRadioGroup</code></td>
+            <td><code>string</code>（被选中的选项文本）</td>
+          </tr>
+          <tr>
+            <td><code>addDatePicker</code> / <code>addTimePicker</code> / <code>addColorButton</code></td>
+            <td><code>string</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="api-block">
+        <div class="api-sig">LoadConfig()</div>
+        <div class="api-desc">
+          重新解析 <code>ui.lua</code>，刷新 <code>Config</code> 表。runtime 启动时已自动调过一次，
+          只有在脚本运行期间 <code>ui.lua</code> 被外部改写、希望立刻生效时才手动调用。
+        </div>
+        <div class="api-desc"><strong>返回</strong>: 实际加载的 <code>ui.lua</code> 路径，找不到时返回
+          <code>nil</code>（<code>Config</code> 保持空表）
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <strong>查找顺序</strong>：runtime 按下面顺序找 <code>ui.lua</code>，命中第一个就停：
+        <ol>
+          <li>脚本入口同级目录（<code>_easyLua_bootstrap.entry</code> 推导得到）</li>
+          <li><code>/data/local/tmp/easyLua/ui.lua</code></li>
+          <li><code>/data/local/tmp/easyLua/scripts/ui.lua</code></li>
+        </ol>
+        都找不到时 <code>Config</code> 是空表，访问任意字段返回 <code>nil</code>，脚本自己 <code>or</code> 兜底默认值即可。
+      </div>
+
+      <div class="callout warn">
+        <strong>注意</strong>：
+        <ul>
+          <li><code>ui.lua</code> 由 SampleUI 端的 <code>LuaUIParser</code> 用<strong>逐行正则</strong>解析（不是真的跑 LuaJIT），
+            所以每行只能是一条 <code>addXxx / beginXxx / setXxx</code> 调用。<code>if / for / 函数定义 / require</code> 等在弹窗阶段会被直接跳过
+          </li>
+          <li>脚本进程里 <code>dofile("ui.lua")</code> 时<strong>会</strong>真的执行 LuaJIT，控制语句虽然能跑但不会影响弹窗效果——保持纯声明式最省心</li>
+          <li><code>options</code> 参数必须是<strong>纯字面量列表</strong>，例如 <code>{"a","b","c"}</code>，不支持变量</li>
+          <li>脚本运行时无法再弹 dialog——这是启动前一次性的配置流程；运行中需要交互请用 <a href="#ui">Highlight / Toast</a></li>
+        </ul>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- App -->
+      <!-- ============================================================ -->
+
+      <h2 id="app">App <small style="color:var(--muted); font-weight:normal">应用管理</small></h2>
+
+      <div class="api-block">
+        <div class="api-sig">CurrentPackage()</div>
+        <div class="api-desc">前台应用包名。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>string</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">CurrentActivity()</div>
+        <div class="api-desc">前台 Activity 类名。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>string</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">Launch(pkg)</div>
+        <div class="api-desc">启动 app（用 monkey 触发 LAUNCHER intent）。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>bool</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">IsInstalled(pkg)</div>
+        <div class="api-desc">是否已安装。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">ForceStop(pkg) <span class="tag tag-root">root</span></div>
+        <div class="api-desc">强制停止 app（am force-stop）。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">Clear(pkg) <span class="tag tag-root">root</span></div>
+        <div class="api-desc">清空 app 数据（pm clear）。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">OpenUrl(url)</div>
+        <div class="api-desc">用浏览器打开 URL。</div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- Device -->
+      <!-- ============================================================ -->
+
+      <h2 id="device">Device <small style="color:var(--muted); font-weight:normal">设备状态</small></h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>API</th>
+            <th>说明</th>
+            <th>返回</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>IsScreenOn()</code></td>
+            <td>屏幕是否点亮</td>
+            <td><code>bool</code></td>
+          </tr>
+          <tr>
+            <td><code>IsScreenUnlock()</code></td>
+            <td>是否已解锁</td>
+            <td><code>bool</code></td>
+          </tr>
+          <tr>
+            <td><code>WakeUp()</code></td>
+            <td>点亮屏幕</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td><code>ScreenOff()</code></td>
+            <td>锁屏（模拟电源键）</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td><code>GetBattery()</code></td>
+            <td>电量 0-100</td>
+            <td><code>int</code></td>
+          </tr>
+          <tr>
+            <td><code>GetBatteryStatus()</code></td>
+            <td>充电状态枚举（BatteryManager.BATTERY_STATUS_*）</td>
+            <td><code>int</code></td>
+          </tr>
+          <tr>
+            <td><code>Vibrate(ms)</code></td>
+            <td>震动指定毫秒</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td><code>GetSdkInt()</code></td>
+            <td>Android API level</td>
+            <td><code>int</code></td>
+          </tr>
+          <tr>
+            <td><code>GetBrand()</code></td>
+            <td>厂商，如 "Xiaomi"</td>
+            <td><code>string</code></td>
+          </tr>
+          <tr>
+            <td><code>GetModel()</code></td>
+            <td>机型，如 "MI 8"</td>
+            <td><code>string</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ============================================================ -->
+      <!-- IME -->
+      <!-- ============================================================ -->
+
+      <h2 id="ime">IME <small style="color:var(--muted); font-weight:normal">输入 / 剪贴板 / 按键</small></h2>
+
+      <div class="api-block">
+        <div class="api-sig">GetClipText()</div>
+        <div class="api-desc">读剪贴板。可能在某些 ROM 上拒绝（Android 10+ 限制）。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>string</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">SetClipText(text)</div>
+        <div class="api-desc">写剪贴板。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">InputText(text)</div>
+        <div class="api-desc">向当前输入框注入文本（<code>input text</code>，仅 ASCII；中文需配合输入法的 commitText 协议）。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">KeyAction(keycode)</div>
+        <div class="api-desc">注入按键事件（input keyevent）。</div>
+      </div>
+
+      <h3>按键常量</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>常量</th>
+            <th>值</th>
+            <th>常量</th>
+            <th>值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>KEY_HOME</code></td>
+            <td>3</td>
+            <td><code>KEY_BACK</code></td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td><code>KEY_VOLUME_UP</code></td>
+            <td>24</td>
+            <td><code>KEY_VOLUME_DOWN</code></td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <td><code>KEY_POWER</code></td>
+            <td>26</td>
+            <td><code>KEY_MENU</code></td>
+            <td>82</td>
+          </tr>
+          <tr>
+            <td><code>KEY_ENTER</code></td>
+            <td>66</td>
+            <td><code>KEY_DEL</code></td>
+            <td>67</td>
+          </tr>
+          <tr>
+            <td><code>KEY_RECENTS</code></td>
+            <td>187</td>
+            <td><code>KEY_SEARCH</code></td>
+            <td>84</td>
+          </tr>
+          <tr>
+            <td><code>KEY_DPAD_UP</code></td>
+            <td>19</td>
+            <td><code>KEY_DPAD_DOWN</code></td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td><code>KEY_DPAD_LEFT</code></td>
+            <td>21</td>
+            <td><code>KEY_DPAD_RIGHT</code></td>
+            <td>22</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ============================================================ -->
+      <!-- Shell -->
+      <!-- ============================================================ -->
+
+      <h2 id="shell">Shell <small style="color:var(--muted); font-weight:normal">系统命令</small></h2>
+
+      <div class="api-block">
+        <div class="api-sig">Exec(cmd) <span class="tag tag-block">阻塞</span> <span class="tag tag-root">root</span>
+        </div>
+        <div class="api-desc">同步执行 shell 命令并返回 stdout（最多 16384 字节）。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>string</code></div>
+      </div>
+
+      <div class="example-snippet"><span class="cmt">-- 拉取设备 IP</span>
+        <span class="kw">local</span> ip = <span class="fn">Exec</span>(<span class="str">"ip route get 1.1.1.1 | head
+          -1 | awk '{print $7}'"</span>)
+
+        <span class="cmt">-- HTTP 请求（系统自带 curl）</span>
+        <span class="kw">local</span> resp = <span class="fn">Exec</span>(<span class="str">"curl -sS
+          https://api.example.com/x"</span>)
+
+        <span class="cmt">-- 列出 sdcard 目录</span>
+        <span class="kw">local</span> ls = <span class="fn">Exec</span>(<span class="str">"ls /sdcard/"</span>)
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- lfs -->
+      <!-- ============================================================ -->
+
+      <h2 id="lfs">lfs <small style="color:var(--muted); font-weight:normal">LuaFileSystem（内置 1.9.0，免 require）</small>
+      </h2>
+
+      <p>
+        <code>lfs</code> 已经静态编进 <code>libeasylua.so</code>，启动时自动注册为全局表，
+        脚本里直接 <code>lfs.xxx</code> 就能用。<code>require("lfs")</code> 也兼容，
+        返回的是同一张表。完整 API 与官方
+        <a href="https://lunarmodules.github.io/luafilesystem/" target="_blank">LuaFileSystem 1.9.0</a>
+        对齐。
+      </p>
+
+      <div class="callout tip">
+        <strong>什么时候用 lfs</strong>：标准 <code>io</code> 只能读写已知路径的文件；目录遍历、
+        创建/删除目录、读修改时间、判断"这是文件还是目录"都得用 lfs。
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>currentdir()</div>
+        <div class="api-desc">取当前工作目录字符串。失败返回 <code>nil, err</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>chdir(path)</div>
+        <div class="api-desc">切换当前工作目录。返回 <code>true</code> 或 <code>nil, err</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>mkdir(path)</div>
+        <div class="api-desc">创建一级目录（不递归）。返回 <code>true</code> 或 <code>nil, err</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>rmdir(path)</div>
+        <div class="api-desc">删除空目录。非空目录会失败，请先清理子项。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>dir(path) <span class="tag tag-block">迭代器</span></div>
+        <div class="api-desc">
+          返回一个迭代器，每次取一个目录条目（包含 <code>"."</code> 与 <code>".."</code>）。
+          出错抛 <code>error</code>，建议外面套 <code>pcall</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>attributes(path [, key])</div>
+        <div class="api-desc">
+          取文件属性。不传 <code>key</code> 返回属性表；传字段名（如
+          <code>"size"</code> / <code>"mode"</code> / <code>"modification"</code>）返回单值。
+        </div>
+        <div class="api-desc"><strong>属性表字段</strong>：</div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>字段</th>
+            <th>含义</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>mode</code></td>
+            <td>类型：<code>"file"</code> / <code>"directory"</code> / <code>"link"</code> / <code>"socket"</code> /
+              <code>"named pipe"</code> / <code>"char device"</code> / <code>"block device"</code> /
+              <code>"other"</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>size</code></td>
+            <td>字节大小</td>
+          </tr>
+          <tr>
+            <td><code>modification</code></td>
+            <td>修改时间（Unix 秒）</td>
+          </tr>
+          <tr>
+            <td><code>access</code></td>
+            <td>访问时间</td>
+          </tr>
+          <tr>
+            <td><code>change</code></td>
+            <td>状态变更时间</td>
+          </tr>
+          <tr>
+            <td><code>permissions</code></td>
+            <td>权限字符串（如 <code>"rwxr-xr-x"</code>）</td>
+          </tr>
+          <tr>
+            <td><code>dev</code> / <code>ino</code> / <code>nlink</code> / <code>uid</code> / <code>gid</code> /
+              <code>rdev</code> / <code>blocks</code> / <code>blksize</code>
+            </td>
+            <td>POSIX 字段</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>symlinkattributes(path [, key])</div>
+        <div class="api-desc">类似 <code>attributes</code>，但不跟随符号链接（对应 <code>lstat</code>）。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>touch(path [, atime [, mtime]])</div>
+        <div class="api-desc">修改文件的访问 / 修改时间（Unix 秒）。省略时用当前时间。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>link(old, new [, symlink])</div>
+        <div class="api-desc">创建链接。<code>symlink=true</code> 创建符号链接，否则硬链接。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>lock(filehandle, mode [, start, length])</div>
+        <div class="api-desc">
+          对 <code>io.open</code> 拿到的文件句柄加锁。<code>mode</code> 为 <code>"r"</code>（共享）或
+          <code>"w"</code>（独占）。<code>start</code> / <code>length</code> 可选，
+          指定加锁的字节范围（默认整文件）。返回 <code>true</code> 或 <code>nil, err</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>unlock(filehandle [, start, length])</div>
+        <div class="api-desc">
+          释放 <code>lock</code> 拿到的文件锁。<code>start</code> / <code>length</code> 与
+          <code>lock</code> 时保持一致。返回 <code>true</code> 或 <code>nil, err</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>lock_dir(path [, seconds_stale])</div>
+        <div class="api-desc">
+          跨进程目录锁（在目录下创建 <code>lockfile.lfs</code> 软链接）。
+          <code>seconds_stale</code> 默认 <code>INT_MAX</code>，超过这个秒数视为陈旧锁可直接抢占。
+          返回带 <code>:free()</code> 方法的对象——调 <code>:free()</code> 才真正释放锁。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>setmode(filehandle, mode) <span class="tag tag-deps">Windows
+            only</span></div>
+        <div class="api-desc">
+          设置文件句柄为 <code>"binary"</code> 或 <code>"text"</code> 模式。仅 Windows 有意义；
+          Android / Linux 上是 no-op，永远返回 <code>true, "binary"</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">lfs.</span>_VERSION</div>
+        <div class="api-desc">版本字符串常量，当前为 <code>"LuaFileSystem 1.9.0"</code>。</div>
+      </div>
+
+      <h3>目录迭代器对象</h3>
+
+      <p>
+        <code>lfs.dir(path)</code> 在 <code>for</code> 循环里用最方便，但它实际返回三个值：
+        <code>iter_func, dir_obj, nil</code>。<code>dir_obj</code> 上还有手动控制的方法，
+        适合需要中途中断、复用的场景：
+      </p>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">dir_obj:</span>next()</div>
+        <div class="api-desc">取下一个条目（字符串）。到末尾返回 <code>nil</code>。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">dir_obj:</span>close()</div>
+        <div class="api-desc">
+          主动释放底层 <code>DIR*</code> 句柄。<code>for</code> 循环正常结束或遇到 GC 时会自动 close，
+          通常无需手动调。
+        </div>
+      </div>
+
+      <h3>常用片段</h3>
+
+      <div class="example-snippet"><span class="cmt">-- 递归创建目录</span>
+        <span class="kw">local function</span> <span class="fn">mkdirs</span>(path)
+        <span class="kw">local</span> cur = <span class="str">""</span>
+        <span class="kw">for</span> part <span class="kw">in</span> path:<span class="fn">gmatch</span>(<span
+          class="str">"[^/]+"</span>) <span class="kw">do</span>
+        cur = (cur == <span class="str">""</span>) <span class="kw">and</span> (<span class="str">"/"</span> .. part)
+        <span class="kw">or</span> (cur .. <span class="str">"/"</span> .. part)
+        <span class="kw">local</span> a = lfs.<span class="fn">attributes</span>(cur)
+        <span class="kw">if not</span> a <span class="kw">then</span> lfs.<span class="fn">mkdir</span>(cur) <span
+          class="kw">end</span>
+        <span class="kw">end</span>
+        <span class="kw">end</span>
+
+        <span class="cmt">-- 递归列文件（深度优先）</span>
+        <span class="kw">local function</span> <span class="fn">walk</span>(dir, fn)
+        <span class="kw">for</span> name <span class="kw">in</span> lfs.<span class="fn">dir</span>(dir) <span
+          class="kw">do</span>
+        <span class="kw">if</span> name ~= <span class="str">"."</span> <span class="kw">and</span> name ~= <span
+          class="str">".."</span> <span class="kw">then</span>
+        <span class="kw">local</span> p = dir .. <span class="str">"/"</span> .. name
+        <span class="kw">local</span> a = lfs.<span class="fn">attributes</span>(p)
+        <span class="kw">if</span> a <span class="kw">and</span> a.mode == <span class="str">"directory"</span> <span
+          class="kw">then</span>
+        <span class="fn">walk</span>(p, fn)
+        <span class="kw">else</span>
+        <span class="fn">fn</span>(p, a)
+        <span class="kw">end</span>
+        <span class="kw">end</span>
+        <span class="kw">end</span>
+        <span class="kw">end</span>
+
+        <span class="cmt">-- 文件存在 + 是目录</span>
+        <span class="kw">local function</span> <span class="fn">isdir</span>(p)
+        <span class="kw">local</span> a = lfs.<span class="fn">attributes</span>(p)
+        <span class="kw">return</span> a <span class="kw">and</span> a.mode == <span class="str">"directory"</span>
+        <span class="kw">end</span>
+
+        <span class="cmt">-- 取文件大小（不存在返回 -1）</span>
+        <span class="kw">local</span> sz = lfs.<span class="fn">attributes</span>(<span
+          class="str">"/sdcard/foo.png"</span>, <span class="str">"size"</span>) <span class="kw">or</span> -<span
+          class="num">1</span>
+
+        <span class="cmt">-- 手动控制目录迭代器（提前中断）</span>
+        <span class="kw">local</span> iter, dir_obj = lfs.<span class="fn">dir</span>(<span
+          class="str">"/sdcard/Pictures"</span>)
+        <span class="kw">while true do</span>
+        <span class="kw">local</span> name = <span class="fn">iter</span>(dir_obj)
+        <span class="kw">if not</span> name <span class="kw">then break end</span>
+        <span class="kw">if</span> name:<span class="fn">match</span>(<span class="str">"%.png$"</span>) <span
+          class="kw">then</span>
+        dir_obj:<span class="fn">close</span>() <span class="cmt">-- 找到第一个 png 立即收工</span>
+        <span class="kw">return</span> <span class="str">"/sdcard/Pictures/"</span> .. name
+        <span class="kw">end</span>
+        <span class="kw">end</span>
+
+        <span class="cmt">-- 文件区间独占锁（比如配置文件读写）</span>
+        <span class="kw">local</span> f = io.<span class="fn">open</span>(<span
+          class="str">"/data/local/tmp/easylua/cfg.lua"</span>, <span class="str">"r+"</span>)
+        <span class="kw">if</span> lfs.<span class="fn">lock</span>(f, <span class="str">"w"</span>) <span
+          class="kw">then</span>
+        <span class="cmt">-- ... 安全读写</span>
+        lfs.<span class="fn">unlock</span>(f)
+        <span class="kw">end</span>
+        f:<span class="fn">close</span>()
+
+        <span class="cmt">-- 跨进程目录锁，30 秒陈旧时强抢</span>
+        <span class="kw">local</span> lk, err = lfs.<span class="fn">lock_dir</span>(<span
+          class="str">"/data/local/tmp/easylua"</span>, <span class="num">30</span>)
+        <span class="kw">if</span> lk <span class="kw">then</span>
+        <span class="cmt">-- ... 临界区</span>
+        lk:<span class="fn">free</span>()
+        <span class="kw">else</span>
+        <span class="fn">Log</span>(<span class="str">"已有别的进程在跑: "</span> .. err)
+        <span class="kw">end</span>
+      </div>
+
+      <div class="callout warn">
+        <strong>实现说明</strong>：LuaJIT 的 io 句柄是 <code>IOFileUD</code>（首字段是 <code>FILE*</code>），
+        与 Lua 5.2+ 的 <code>luaL_Stream</code> 二进制不一致。我们在编译 lfs.c 时用
+        <code>-DLFS_USE_LUAJIT_FILE=1</code> 强制走 5.1 风格 <code>FILE**</code> 兼容层。
+        这个细节用户无需关心，<code>lfs.lock(io.open(...))</code> 直接能用。
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- cjson -->
+      <!-- ============================================================ -->
+
+      <h2 id="cjson">cjson <small style="color:var(--muted); font-weight:normal">JSON 编解码（内置纯 Lua）</small></h2>
+
+      <p>
+        easyLua 内置一份纯 Lua 的 cjson 实现，API 与 lua-cjson 兼容。
+        启动时自动注册为全局 <code>cjson</code> 表，<code>require("cjson")</code> 也能拿到同一份。
+        典型用途：HTTP 接口序列化、配置存档、调试输出。
+      </p>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">cjson.</span>encode(v, pretty)</div>
+        <div class="api-desc">
+          把任意 Lua 值序列化为 JSON 字符串。<code>pretty = true</code> 时输出多行缩进
+          （2 空格，按 key 字典序排序，方便 diff），默认紧凑单行。
+        </div>
+        <div class="api-desc"><strong>支持的类型</strong>：<code>nil</code> → <code>null</code>，
+          <code>boolean</code> / <code>number</code> / <code>string</code> 直转，
+          <code>table</code> 自动判别 array（连续 1..n）或 object（其它），
+          <code>function / userdata / cdata</code> 等转字符串占位（用 <code>tostring</code>）。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">cjson.</span>decode(s)</div>
+        <div class="api-desc">
+          把 JSON 字符串解析为 Lua 值。出错抛 <code>error</code>，建议外面套 <code>pcall</code> 兜底。
+          支持 <code>\uXXXX</code> 转义到 UTF-8（仅 BMP 平面），尾部空白 OK，多余内容会报错。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">cjson.</span>null</div>
+        <div class="api-desc">
+          表示 JSON <code>null</code> 的占位单例。decode 时遇到 <code>null</code> 返回这个值；
+          encode 时显式塞入它会输出 <code>null</code>。和 <code>nil</code> 区别：表里 <code>x = nil</code>
+          等于"没有 x 字段"，table 序列化时会丢失；想保留就用 <code>x = cjson.null</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig"><span class="ns">cjson.</span>_VERSION</div>
+        <div class="api-desc">版本字符串，当前为 <code>"easylua-cjson 1.0 (pure-lua)"</code>。</div>
+      </div>
+
+      <h3>print 已增强：table 自动展 JSON</h3>
+
+      <p>
+        runtime.lua 启动时把全局 <code>print</code> 重新包装：参数中的 table 会被
+        <code>cjson.encode(t, pretty=true)</code> 展开多行输出，其它类型保持原样。
+        意味着你不需要再手写 <code>for k,v in pairs(t) do ... end</code> 调试表内容。
+      </p>
+
+      <div class="example-snippet"><span class="cmt">-- 旧行为：print({a=1,b=2}) 输出 "table: 0x..."</span>
+        <span class="cmt">-- 新行为：自动展开成多行 JSON</span>
+        <span class="fn">print</span>({ name = <span class="str">"alice"</span>, age = <span class="num">28</span>, tags
+        = {<span class="str">"vip"</span>, <span class="str">"new"</span>} })
+        <span class="cmt">-- 输出：</span>
+        <span class="cmt">-- {</span>
+        <span class="cmt">-- "age": 28,</span>
+        <span class="cmt">-- "name": "alice",</span>
+        <span class="cmt">-- "tags": [</span>
+        <span class="cmt">-- "vip",</span>
+        <span class="cmt">-- "new"</span>
+        <span class="cmt">-- ]</span>
+        <span class="cmt">-- }</span>
+
+        <span class="cmt">-- 混合参数：table 展开，其它原样</span>
+        <span class="fn">print</span>(<span class="str">"resp ="</span>, <span class="fn">cjson</span>.<span
+          class="fn">decode</span>(<span class="str">'{"ok":true,"data":[1,2,3]}'</span>))
+        <span class="cmt">-- 输出：resp = { ... 多行 JSON ... }</span>
+      </div>
+
+      <h3>常用片段</h3>
+
+      <div class="example-snippet"><span class="cmt">-- 1) 简单存档（替代 io.open + loadstring）</span>
+        <span class="kw">local function</span> <span class="fn">save</span>(path, t)
+        <span class="kw">local</span> f = io.<span class="fn">open</span>(path, <span class="str">"w"</span>)
+        f:<span class="fn">write</span>(<span class="fn">cjson</span>.<span class="fn">encode</span>(t, <span
+          class="kw">true</span>)) <span class="cmt">-- pretty 方便手动看</span>
+        f:<span class="fn">close</span>()
+        <span class="kw">end</span>
+
+        <span class="kw">local function</span> <span class="fn">load</span>(path)
+        <span class="kw">local</span> f = io.<span class="fn">open</span>(path, <span class="str">"r"</span>)
+        <span class="kw">if not</span> f <span class="kw">then return</span> {} <span class="kw">end</span>
+        <span class="kw">local</span> data = f:<span class="fn">read</span>(<span class="str">"*a"</span>)
+        f:<span class="fn">close</span>()
+        <span class="kw">local</span> ok, v = <span class="fn">pcall</span>(<span class="fn">cjson</span>.<span
+          class="fn">decode</span>, data)
+        <span class="kw">return</span> ok <span class="kw">and</span> v <span class="kw">or</span> {}
+        <span class="kw">end</span>
+
+        <span class="cmt">-- 2) HTTP 请求 + 解析</span>
+        <span class="kw">local</span> body = <span class="fn">Exec</span>(<span class="str">"curl -sS
+          https://httpbin.org/json"</span>)
+        <span class="kw">local</span> ok, doc = <span class="fn">pcall</span>(<span class="fn">cjson</span>.<span
+          class="fn">decode</span>, body)
+        <span class="kw">if</span> ok <span class="kw">then</span>
+        <span class="fn">print</span>(doc.slideshow.title) <span class="cmt">-- 直接当 lua 表用</span>
+        <span class="kw">end</span>
+
+        <span class="cmt">-- 3) 上报事件（紧凑格式更省字节）</span>
+        <span class="kw">local</span> payload = <span class="fn">cjson</span>.<span class="fn">encode</span>({
+        device = <span class="fn">GetModel</span>(),
+        battery = <span class="fn">GetBattery</span>(),
+        ts = <span class="fn">os</span>.<span class="fn">time</span>(),
+        })
+        <span class="fn">Exec</span>(<span class="str">"curl -sS -X POST https://api.example.com/event -d '"</span> ..
+        payload .. <span class="str">"'"</span>)
+
+        <span class="cmt">-- 4) 区分 null 与 nil</span>
+        <span class="kw">local</span> t = { keepNull = <span class="fn">cjson</span>.null, dropMe = <span
+          class="kw">nil</span> }
+        <span class="fn">print</span>(<span class="fn">cjson</span>.<span class="fn">encode</span>(t)) <span
+          class="cmt">-- {"keepNull":null}</span>
+      </div>
+
+      <div class="callout tip">
+        <strong>选择紧凑还是 pretty</strong>：写文件存档建议 <code>pretty=true</code> 方便手动 diff；
+        发 HTTP / 写日志则用紧凑（默认）省字节。<code>print</code> 那条路径强制 pretty——
+        反正只在调试时看。
+      </div>
+
+      <div class="callout warn">
+        <strong>性能</strong>：纯 Lua 实现比 lua-cjson 的 C 版慢 5~10 倍。每次几 KB 的 payload 完全无感；
+        若你的脚本在热路径里序列化几 MB 的数据就需要换实现了——不过那种场景很罕见。
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- Utils -->
+      <!-- ============================================================ -->
+
+      <h2 id="utils">Utils <small style="color:var(--muted); font-weight:normal">通用工具</small></h2>
+
+      <div class="api-block">
+        <div class="api-sig">Sleep(ms) <span class="tag tag-block">阻塞</span></div>
+        <div class="api-desc">阻塞 ms 毫秒。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">NowMs()</div>
+        <div class="api-desc">单调时钟毫秒（CLOCK_MONOTONIC）。</div>
+        <div class="api-desc"><strong>返回</strong>: <code>int</code></div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">NowUs()</div>
+        <div class="api-desc">单调时钟微秒。</div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">print(...) <span class="tag tag-deps">已增强</span></div>
+        <div class="api-desc">
+          带 <code>[HH:MM:SS.mmm script.lua:line]</code> 前缀输出到 stdout。参数中的
+          <code>table</code> 自动用 <code>cjson.encode(t, true)</code> 展开多行 JSON；
+          其它类型保持原样。详见 <a href="#cjson">cjson 章节</a>。
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 脚本生命周期 -->
+      <!-- ============================================================ -->
+
+      <h2 id="lifecycle">脚本生命周期 <small style="color:var(--muted); font-weight:normal">退出 / 回调</small></h2>
+
+      <div class="api-block">
+        <div class="api-sig">exitScript()</div>
+        <div class="api-desc">立即终止脚本。会触发 <code>setStopCallback</code> 注册的回调，
+          <code>exitcode = 2</code>，<code>isError = false</code>。
+        </div>
+      </div>
+
+      <div class="api-block">
+        <div class="api-sig">setStopCallback(fn)</div>
+        <div class="api-desc">注册脚本结束回调。<code>fn(isError, exitcode)</code>：</div>
+        <div class="params">
+          <div><span class="pname">isError</span>: <code>bool</code> - 是否因 Lua 错误结束</div>
+          <div><span class="pname">exitcode</span>: <code>int</code> -
+            <code>0</code> 主线程正常结束 /
+            <code>1</code> Lua 错误未捕获 /
+            <code>2</code> 主动 <code>exitScript()</code>
+          </div>
+        </div>
+        <div class="api-desc">重复调用会覆盖之前的回调；传 <code>nil</code> 取消。</div>
+      </div>
+
+      <div class="example-snippet"><span class="fn">setStopCallback</span>(<span class="kw">function</span>(isError,
+        exitcode)
+        <span class="kw">if</span> isError <span class="kw">then</span>
+        <span class="fn">print</span>(<span class="str">"脚本异常结束 exitcode="</span> .. exitcode)
+        <span class="kw">else</span>
+        <span class="fn">print</span>(<span class="str">"脚本正常结束 exitcode="</span> .. exitcode)
+        <span class="kw">end</span>
+        <span class="kw">end</span>)
+
+        <span class="cmt">-- 主流程……</span>
+        <span class="kw">if</span> someCondition <span class="kw">then</span>
+        <span class="fn">exitScript</span>() <span class="cmt">-- 立即退出，触发 stop callback (exitcode=2)</span>
+        <span class="kw">end</span>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 标准库 -->
+      <!-- ============================================================ -->
+
+      <h2 id="stdlib">LuaJIT 标准库</h2>
+
+      <p>所有 LuaJIT 5.4 标准库已开放，无需特殊处理：</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>库</th>
+            <th>常用功能</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>io</code></td>
+            <td><code>io.open / read / write / close</code> 文件 I/O</td>
+          </tr>
+          <tr>
+            <td><code>os</code></td>
+            <td><code>os.time / date / remove / rename / getenv</code></td>
+          </tr>
+          <tr>
+            <td><code>string</code></td>
+            <td><code>string.format / find / match / gmatch / gsub / sub</code></td>
+          </tr>
+          <tr>
+            <td><code>table</code></td>
+            <td><code>table.insert / remove / concat / sort</code></td>
+          </tr>
+          <tr>
+            <td><code>math</code></td>
+            <td><code>math.random / floor / ceil / pi / sqrt</code></td>
+          </tr>
+          <tr>
+            <td><code>coroutine</code></td>
+            <td><code>coroutine.create / resume / yield</code></td>
+          </tr>
+          <tr>
+            <td><code>ffi</code></td>
+            <td>LuaJIT FFI（高级用户可自定义 cdef，但不推荐）</td>
+          </tr>
+          <tr>
+            <td><code>lfs</code></td>
+            <td>文件系统：目录遍历、属性、mkdir/rmdir、链接、文件锁。详见 <a href="#lfs">lfs 章节</a>。</td>
+          </tr>
+          <tr>
+            <td><code>cjson</code></td>
+            <td>JSON 编解码 + <code>print(table)</code> 自动展开。详见 <a href="#cjson">cjson 章节</a>。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout tip">
+        <strong>持久化 / 配置</strong>：用 <code>io.open</code> + <code>cjson.encode/decode</code>
+        最简单。例子见 <a href="#cjson">cjson 章节</a>。
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- 示例 -->
+      <!-- ============================================================ -->
+
+      <h2 id="examples">示例</h2>
+
+      <h3>1. 找色 → 高亮 → 点击</h3>
+      <div class="example-snippet"><span class="kw">local</span> x, y = <span class="fn">FindMultiColors</span>(<span
+          class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>,
+        <span class="str">"FF3344-101010,7,0,EE2233-101010,14,0,DD1122-101010"</span>, <span class="num">0.95</span>,
+        <span class="num">0</span>)
+        <span class="kw">if</span> x &gt;= <span class="num">0</span> <span class="kw">then</span>
+        <span class="fn">Highlight</span>(x - <span class="num">20</span>, y - <span class="num">20</span>, <span
+          class="num">40</span>, <span class="num">40</span>, <span class="str">"#FF0000"</span>, <span
+          class="num">1500</span>)
+        <span class="fn">Click</span>(x, y)
+        <span class="kw">end</span>
+      </div>
+
+      <h3>2. 状态机循环</h3>
+      <div class="example-snippet"><span class="kw">while true do</span>
+        <span class="cmt">-- 用 DetectsMultiColors 快速判定当前界面</span>
+        <span class="kw">if</span> <span class="fn">DetectsMultiColors</span>(<span
+          class="str">"100,200,FF0000-101010|500,200,FFFFFF-101010"</span>, <span class="num">1.0</span>) <span
+          class="kw">then</span>
+        <span class="fn">Log</span>(<span class="str">"在主界面"</span>)
+        <span class="fn">Click</span>(<span class="num">540</span>, <span class="num">1200</span>)
+        <span class="kw">elseif</span> <span class="fn">CmpColor</span>(<span class="num">100</span>, <span
+          class="num">100</span>, <span class="str">"00FF00-202020"</span>, <span class="num">1.0</span>) <span
+          class="kw">then</span>
+        <span class="fn">Log</span>(<span class="str">"任务完成"</span>)
+        <span class="kw">break</span>
+        <span class="kw">end</span>
+
+        <span class="fn">Sleep</span>(<span class="num">300</span>)
+        <span class="kw">end</span>
+      </div>
+
+      <h3>3. 调 curl 请求云端</h3>
+      <div class="example-snippet"><span class="kw">local</span> json = <span class="fn">Exec</span>(<span
+          class="str">[[curl -sS -X POST https://api.example.com/event \
+          -H 'Content-Type: application/json' \
+          -d '{"device":"]]</span> .. <span class="fn">GetModel</span>() .. <span class="str">[[","battery":]]</span> ..
+        <span class="fn">GetBattery</span>() .. <span class="str">[[}']]</span>)
+        <span class="fn">Log</span>(<span class="str">"resp: "</span> .. json)
+      </div>
+
+      <h3>4. 截屏存盘</h3>
+      <div class="example-snippet"><span class="kw">local</span> stamp = os.<span class="fn">date</span>(<span
+          class="str">"%Y%m%d_%H%M%S"</span>)
+        <span class="fn">CaptureScreen</span>():<span class="fn">Save</span>(<span class="str">"/sdcard/easylua_"</span>
+        .. stamp .. <span class="str">".png"</span>)
+
+        <span class="cmt">-- 也可以指定 JPG + 质量</span>
+        <span class="fn">CaptureScreen</span>():<span class="fn">Save</span>(<span class="str">"/sdcard/foo.jpg"</span>,
+        <span class="str">"jpg"</span>, <span class="num">85</span>)
+
+        <span class="cmt">-- 抓某区域存 BMP（最快、无压缩）</span>
+        <span class="fn">CaptureScreen</span>(<span class="num">0</span>, <span class="num">0</span>, <span
+          class="num">540</span>, <span class="num">960</span>):<span class="fn">Save</span>(<span
+          class="str">"/sdcard/half.bmp"</span>)
+      </div>
+
+      <hr style="margin-top: 60px; border: none; border-top: 1px solid var(--border)">
+      <p style="color: var(--muted); font-size: 12px; text-align: center;">
+        easyLua · 基于 LuaJIT 5.4 · Stage I 完成 · 持续迭代中
+      </p>
+
+    </main>
+  </div>
+
+</body>
+
+</html>
